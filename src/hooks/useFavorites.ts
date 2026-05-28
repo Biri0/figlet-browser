@@ -16,7 +16,11 @@ export function useFavorites() {
   });
 
   useEffect(() => {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(Array.from(favorites)));
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(Array.from(favorites)));
+    } catch {
+      // Silently degrade to in-memory state when storage is unavailable
+    }
   }, [favorites]);
 
   const toggle = useCallback((fontName: string) => {

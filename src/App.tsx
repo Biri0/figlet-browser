@@ -31,7 +31,7 @@ function App() {
     try {
       localStorage.setItem(COLUMNS_KEY, String(value));
     } catch {
-      // ignore
+      // Silently degrade to in-memory state when storage is unavailable
     }
   };
 
