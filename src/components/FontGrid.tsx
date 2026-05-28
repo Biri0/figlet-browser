@@ -8,9 +8,10 @@ interface FontGridProps {
   toggleFavorite: (name: string) => void;
   search: string;
   columns: number;
+  onZoom: (fontName: string) => void;
 }
 
-export function FontGrid({ fontNames, getPreview, favorites, toggleFavorite, search, columns }: FontGridProps) {
+export function FontGrid({ fontNames, getPreview, favorites, toggleFavorite, search, columns, onZoom }: FontGridProps) {
   const filtered = fontNames.filter((name) =>
     name.toLowerCase().includes(search.toLowerCase().trim())
   );
@@ -40,6 +41,7 @@ export function FontGrid({ fontNames, getPreview, favorites, toggleFavorite, sea
             preview={preview ?? { name, text: '', loading: true }}
             isFavorite={favorites.has(name)}
             onToggleFavorite={() => toggleFavorite(name)}
+            onZoom={() => onZoom(name)}
           />
         );
       })}

@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Header } from './components/Header';
 import { FontGrid } from './components/FontGrid';
+import { ZoomModal } from './components/ZoomModal';
 import { useFonts } from './hooks/useFonts';
 import { useFavorites } from './hooks/useFavorites';
 
@@ -20,6 +21,7 @@ function App() {
   const [text, setText] = useState('Hello, World!');
   const [search, setSearch] = useState('');
   const [columns, setColumns] = useState(getInitialColumns);
+  const [zoomedFont, setZoomedFont] = useState<string | null>(null);
   const { fontNames, getPreview, loading } = useFonts(text);
   const { favorites, toggle } = useFavorites();
 
@@ -31,6 +33,8 @@ function App() {
       // ignore
     }
   };
+
+  const zoomedPreview = zoomedFont ? getPreview(zoomedFont) : undefined;
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -55,12 +59,23 @@ function App() {
             toggleFavorite={toggle}
             search={search}
             columns={columns}
+            onZoom={setZoomedFont}
           />
         )}
       </main>
       <footer className="text-center py-4 text-xs text-gray-400 dark:text-gray-600 border-t border-gray-200 dark:border-gray-700">
         {fontNames.length} fonts available · {favorites.size} pinned · {columns} columns
       </footer>
+
+      {zoomedPreview && (
+        <ZoomModal
+          fontName={zoomedPreview.name}
+          text={zoomedPreview.text}
+          isFavorite={favorites.has(zoomedPreview.name)}
+          onToggleFavorite={() => toggle(zoomedPreview.name)}
+          onClose={() => setZoomedFont(null)}
+        />
+      )}
     </div>
   );
 }
