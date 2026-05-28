@@ -5,6 +5,8 @@ import type { FontPreview } from '../types';
 const BATCH_SIZE = 12;
 const BATCH_DELAY_MS = 50;
 
+figlet.defaults({ fontPath: '/fonts' });
+
 export function useFonts(inputText: string) {
   const [fontNames, setFontNames] = useState<string[]>([]);
   const [previews, setPreviews] = useState<Map<string, FontPreview>>(new Map());

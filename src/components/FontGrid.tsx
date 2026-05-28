@@ -7,9 +7,10 @@ interface FontGridProps {
   favorites: Set<string>;
   toggleFavorite: (name: string) => void;
   search: string;
+  columns: number;
 }
 
-export function FontGrid({ fontNames, getPreview, favorites, toggleFavorite, search }: FontGridProps) {
+export function FontGrid({ fontNames, getPreview, favorites, toggleFavorite, search, columns }: FontGridProps) {
   const filtered = fontNames.filter((name) =>
     name.toLowerCase().includes(search.toLowerCase().trim())
   );
@@ -30,7 +31,7 @@ export function FontGrid({ fontNames, getPreview, favorites, toggleFavorite, sea
   }
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 p-4">
+    <div className="grid gap-3 py-3" style={{ gridTemplateColumns: `repeat(${columns}, minmax(0, 1fr))` }}>
       {sorted.map((name) => {
         const preview = getPreview(name);
         return (

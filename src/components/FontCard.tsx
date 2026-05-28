@@ -23,12 +23,12 @@ export function FontCard({ preview, isFavorite, onToggleFavorite }: FontCardProp
   }, [preview.text]);
 
   return (
-    <div className="font-card relative bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-3 hover:border-indigo-400 dark:hover:border-indigo-500">
-      <div className="flex items-center justify-between mb-2 gap-2">
-        <span className="text-xs font-semibold text-gray-500 dark:text-gray-400 truncate">
+    <div className="font-card relative bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-2 hover:border-indigo-400 dark:hover:border-indigo-500">
+      <div className="flex items-center justify-between mb-1.5 gap-2">
+        <span className="text-[10px] font-semibold text-gray-500 dark:text-gray-400 truncate">
           {preview.name}
         </span>
-        <div className="flex items-center gap-1 shrink-0">
+        <div className="flex items-center gap-0.5 shrink-0">
           <button
             onClick={onToggleFavorite}
             className={`p-1 rounded transition-colors ${
@@ -38,7 +38,7 @@ export function FontCard({ preview, isFavorite, onToggleFavorite }: FontCardProp
             }`}
             title={isFavorite ? 'Unfavorite' : 'Favorite'}
           >
-            <Star className="w-4 h-4" fill={isFavorite ? 'currentColor' : 'none'} />
+            <Star className="w-3.5 h-3.5" fill={isFavorite ? 'currentColor' : 'none'} />
           </button>
           <button
             onClick={handleCopy}
@@ -46,22 +46,22 @@ export function FontCard({ preview, isFavorite, onToggleFavorite }: FontCardProp
             title="Copy ASCII art"
           >
             {copied ? (
-              <Check className="w-4 h-4 text-green-500" />
+              <Check className="w-3.5 h-3.5 text-green-500" />
             ) : (
-              <Copy className="w-4 h-4" />
+              <Copy className="w-3.5 h-3.5" />
             )}
           </button>
         </div>
       </div>
-      <div className="min-h-[4rem]">
+      <div className="min-h-[3rem]">
         {preview.loading ? (
-          <div className="space-y-1.5 animate-pulse">
-            <div className="h-3 bg-gray-200 dark:bg-gray-700 rounded w-3/4" />
-            <div className="h-3 bg-gray-200 dark:bg-gray-700 rounded w-1/2" />
-            <div className="h-3 bg-gray-200 dark:bg-gray-700 rounded w-5/6" />
+          <div className="space-y-1 animate-pulse">
+            <div className="h-2 bg-gray-200 dark:bg-gray-700 rounded w-3/4" />
+            <div className="h-2 bg-gray-200 dark:bg-gray-700 rounded w-1/2" />
+            <div className="h-2 bg-gray-200 dark:bg-gray-700 rounded w-5/6" />
           </div>
         ) : (
-          <pre className="ascii-art text-xs text-gray-800 dark:text-gray-200 whitespace-pre">
+          <pre className="ascii-art text-[10px] text-gray-800 dark:text-gray-200 whitespace-pre">
             {preview.text}
           </pre>
         )}
