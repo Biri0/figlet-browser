@@ -1,122 +1,84 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
-import './App.css'
+import { useState } from 'react';
+import { Header } from './components/Header';
+import { FontGrid } from './components/FontGrid';
+import { ZoomModal } from './components/ZoomModal';
+import { useFonts } from './hooks/useFonts';
+import { useFavorites } from './hooks/useFavorites';
 
-function App() {
-  const [count, setCount] = useState(0)
+const COLUMNS_KEY = 'figlet-browser-columns';
 
-  return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.tsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <button
-          type="button"
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
-
-      <div className="ticks"></div>
-
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
-
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
-  )
+function getInitialColumns(): number {
+  try {
+    const raw = localStorage.getItem(COLUMNS_KEY);
+    if (raw) return Math.max(1, Math.min(8, parseInt(raw, 10)));
+  } catch {
+    // ignore
+  }
+  // Default to 1 column on narrow viewports, 5 on desktop
+  return window.innerWidth < 640 ? 1 : 5;
 }
 
-export default App
+function App() {
+  const [text, setText] = useState('Hello, World!');
+  const [search, setSearch] = useState('');
+  const [columns, setColumns] = useState(getInitialColumns);
+  const [zoomedFont, setZoomedFont] = useState<string | null>(null);
+  const { fontNames, getPreview, loading } = useFonts(text);
+  const { favorites, toggle } = useFavorites();
+
+  const handleColumnsChange = (value: number) => {
+    setColumns(value);
+    try {
+      localStorage.setItem(COLUMNS_KEY, String(value));
+    } catch {
+      // Silently degrade to in-memory state when storage is unavailable
+    }
+  };
+
+  const zoomedPreview = zoomedFont ? getPreview(zoomedFont) : undefined;
+
+  return (
+    <div className="min-h-screen flex flex-col">
+      <Header
+        text={text}
+        onTextChange={setText}
+        search={search}
+        onSearchChange={setSearch}
+        columns={columns}
+        onColumnsChange={handleColumnsChange}
+      />
+      <main className="flex-1 max-w-[90rem] mx-auto w-full px-2">
+        {loading ? (
+          <div className="flex items-center justify-center py-20 text-gray-500 dark:text-gray-400">
+            Loading fonts...
+          </div>
+        ) : (
+          <FontGrid
+            fontNames={fontNames}
+            getPreview={getPreview}
+            favorites={favorites}
+            toggleFavorite={toggle}
+            search={search}
+            columns={columns}
+            onZoom={setZoomedFont}
+          />
+        )}
+      </main>
+      <footer className="text-center py-4 text-xs text-gray-400 dark:text-gray-600 border-t border-gray-200 dark:border-gray-700">
+        {fontNames.length} fonts available · {favorites.size} pinned · {columns} {columns === 1 ? 'column' : 'columns'}
+      </footer>
+
+      {zoomedPreview && (
+        <ZoomModal
+          fontName={zoomedPreview.name}
+          text={zoomedPreview.text}
+          isFavorite={favorites.has(zoomedPreview.name)}
+          onToggleFavorite={() => toggle(zoomedPreview.name)}
+          onClose={() => setZoomedFont(null)}
+        />
+      )}
+    </div>
+  );
+}
+
+export default App;
