@@ -32,7 +32,7 @@ export function FontGrid({ fontNames, getPreview, favorites, toggleFavorite, sea
   }
 
   return (
-    <div className="grid gap-3 py-3" style={{ gridTemplateColumns: `repeat(${columns}, minmax(0, 1fr))` }}>
+    <div className="font-grid grid gap-3 py-3" style={{ gridTemplateColumns: `repeat(${columns}, minmax(0, 1fr))` }}>
       {sorted.map((name) => {
         const preview = getPreview(name);
         return (

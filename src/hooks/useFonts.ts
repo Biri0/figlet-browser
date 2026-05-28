@@ -38,17 +38,9 @@ export function useFonts(inputText: string) {
     if (fontNames.length === 0) return;
     textRef.current = inputText;
 
-    // Reset all to loading
-    setPreviews((prev) => {
-      const next = new Map(prev);
-      for (const name of fontNames) {
-        next.set(name, { name, text: '', loading: true });
-      }
-      return next;
-    });
-
     let cancelled = false;
     let index = 0;
+    let timeoutId: number | undefined;
 
     function processBatch() {
       if (cancelled) return;
@@ -76,14 +68,29 @@ export function useFonts(inputText: string) {
 
       index += BATCH_SIZE;
       if (index < fontNames.length) {
-        setTimeout(processBatch, BATCH_DELAY_MS);
+        timeoutId = window.setTimeout(processBatch, BATCH_DELAY_MS);
       }
     }
 
-    processBatch();
+    timeoutId = window.setTimeout(() => {
+      if (cancelled) return;
+
+      setPreviews((prev) => {
+        const next = new Map(prev);
+        for (const name of fontNames) {
+          next.set(name, { name, text: '', loading: true });
+        }
+        return next;
+      });
+
+      processBatch();
+    }, 0);
 
     return () => {
       cancelled = true;
+      if (timeoutId !== undefined) {
+        window.clearTimeout(timeoutId);
+      }
     };
   }, [fontNames, inputText]);
 

@@ -10,11 +10,12 @@ const COLUMNS_KEY = 'figlet-browser-columns';
 function getInitialColumns(): number {
   try {
     const raw = localStorage.getItem(COLUMNS_KEY);
-    if (raw) return Math.max(2, Math.min(8, parseInt(raw, 10)));
+    if (raw) return Math.max(1, Math.min(8, parseInt(raw, 10)));
   } catch {
     // ignore
   }
-  return 5;
+  // Default to 1 column on narrow viewports, 5 on desktop
+  return window.innerWidth < 640 ? 1 : 5;
 }
 
 function App() {
@@ -64,7 +65,7 @@ function App() {
         )}
       </main>
       <footer className="text-center py-4 text-xs text-gray-400 dark:text-gray-600 border-t border-gray-200 dark:border-gray-700">
-        {fontNames.length} fonts available · {favorites.size} pinned · {columns} columns
+        {fontNames.length} fonts available · {favorites.size} pinned · {columns} {columns === 1 ? 'column' : 'columns'}
       </footer>
 
       {zoomedPreview && (

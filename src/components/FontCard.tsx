@@ -15,7 +15,7 @@ function ScaledPre({ text }: { text: string }) {
   const [scale, setScale] = useState(1);
   const [height, setHeight] = useState<number | undefined>(undefined);
 
-  useLayoutEffect(() => {
+  const updateScale = useCallback(() => {
     const wrapper = wrapperRef.current;
     const pre = preRef.current;
     if (!wrapper || !pre) return;
@@ -29,13 +29,27 @@ function ScaledPre({ text }: { text: string }) {
       setScale(newScale);
       setHeight(preHeight * newScale);
     }
-  }, [text]);
+  }, []);
+
+  useLayoutEffect(() => {
+    updateScale();
+  }, [text, updateScale]);
+
+  useLayoutEffect(() => {
+    const wrapper = wrapperRef.current;
+    if (!wrapper) return;
+
+    const observer = new ResizeObserver(updateScale);
+    observer.observe(wrapper);
+
+    return () => observer.disconnect();
+  }, [updateScale]);
 
   return (
     <div ref={wrapperRef} className="overflow-hidden w-full" style={{ height }}>
       <pre
         ref={preRef}
-        className="ascii-art text-sm text-gray-800 dark:text-gray-200 whitespace-pre inline-block"
+        className="ascii-art text-[10px] sm:text-sm text-gray-800 dark:text-gray-200 whitespace-pre inline-block"
         style={{ transform: `scale(${scale})`, transformOrigin: 'top left' }}
       >
         {text}
@@ -66,7 +80,7 @@ export function FontCard({ preview, isFavorite, onToggleFavorite, onZoom }: Font
 
   return (
     <div
-      className="font-card relative bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-2"
+      className="font-card relative bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-2 min-w-0 overflow-hidden"
       onClick={onZoom}
     >
       <div className="flex items-center justify-between mb-1.5 gap-2">
