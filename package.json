@@ -5,8 +5,8 @@
   "type": "module",
   "scripts": {
     "copy-fonts": "node scripts/copy-fonts.js",
-    "dev": "bun run copy-fonts && vite",
-    "build": "bun run copy-fonts && tsc -b && vite build",
+    "dev": "npm run copy-fonts && vite",
+    "build": "npm run copy-fonts && tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview"
   },
