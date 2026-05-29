@@ -4,10 +4,66 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Figlet Browser</title>
+    <meta
+      name="description"
+      content="Preview, filter, favorite, and copy hundreds of FIGlet ASCII art fonts online with Figlet Browser."
+    />
+    <meta name="robots" content="index, follow" />
+    <meta name="theme-color" content="#111827" />
+    <link rel="canonical" href="__SITE_URL__/" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Figlet Browser" />
+    <meta property="og:title" content="Figlet Browser - Preview ASCII Art Fonts Online" />
+    <meta
+      property="og:description"
+      content="Browse hundreds of FIGlet fonts, preview custom text, pin favorites, and copy ASCII art in seconds."
+    />
+    <meta property="og:url" content="__SITE_URL__/" />
+    <meta property="og:image" content="__SITE_URL__/og-image.png" />
+    <meta property="og:image:alt" content="Figlet Browser ASCII art font preview" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Figlet Browser - Preview ASCII Art Fonts Online" />
+    <meta
+      name="twitter:description"
+      content="Browse hundreds of FIGlet fonts, preview custom text, pin favorites, and copy ASCII art in seconds."
+    />
+    <meta name="twitter:image" content="__SITE_URL__/og-image.png" />
+
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "Figlet Browser",
+        "url": "__SITE_URL__/",
+        "applicationCategory": "DesignApplication",
+        "operatingSystem": "Any",
+        "description": "An online FIGlet and ASCII art font preview tool for browsing fonts, testing custom text, saving favorites, and copying generated ASCII art.",
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "USD"
+        }
+      }
+    </script>
+    <title>Figlet Browser - Preview ASCII Art Fonts Online</title>
   </head>
   <body>
-    <div id="root"></div>
+    <div id="root">
+      <main>
+        <h1>Figlet Browser</h1>
+        <p>
+          Preview, filter, favorite, and copy FIGlet ASCII art fonts online.
+          Try classic fonts like Standard, Slant, Big, Doom, Small, Shadow,
+          Banner, Digital, Isometric, Varsity, and Star Wars.
+        </p>
+      </main>
+    </div>
+    <noscript>
+      Figlet Browser needs JavaScript for live ASCII art previews, filtering,
+      favorites, and copy controls.
+    </noscript>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

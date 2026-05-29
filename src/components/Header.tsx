@@ -18,6 +18,7 @@ export function Header({ text, onTextChange, search, onSearchChange, columns, on
         </h1>
         <input
           type="text"
+          aria-label="Preview text"
           value={text}
           onChange={(e) => onTextChange(e.target.value)}
           placeholder="Type something..."
@@ -28,6 +29,7 @@ export function Header({ text, onTextChange, search, onSearchChange, columns, on
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
             <input
               type="text"
+              aria-label="Filter fonts"
               value={search}
               onChange={(e) => onSearchChange(e.target.value)}
               placeholder="Filter fonts..."
@@ -37,6 +39,7 @@ export function Header({ text, onTextChange, search, onSearchChange, columns, on
           <div className="flex items-center gap-1.5 shrink-0">
             <Columns3 className="w-4 h-4 text-gray-400" />
             <select
+              aria-label="Grid columns"
               value={columns}
               onChange={(e) => onColumnsChange(Number(e.target.value))}
               className="py-2 pl-2 pr-7 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm appearance-none cursor-pointer"

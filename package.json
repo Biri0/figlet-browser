@@ -6,7 +6,7 @@
   "scripts": {
     "copy-fonts": "node scripts/copy-fonts.js",
     "dev": "npm run copy-fonts && vite",
-    "build": "npm run copy-fonts && tsc -b && vite build",
+    "build": "npm run copy-fonts && tsc -b && vite build && node scripts/finalize-seo.js",
     "lint": "eslint .",
     "preview": "vite preview"
   },
